@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Background;
+
+use Jose1805\LaravelMicroservices\Background\src\Resolver;
+
+class $CLASS_NAME$ implements Resolver
+{
+    private $input_data = [];
+
+    /**
+     * Asigna los datos de entrada en array. El parámetro debe ser un array
+     * que contenga un key llamado input_data
+     *
+     * @param array $data
+     * @return void
+     */
+    public function setInputData(array $data)
+    {
+        $this->input_data = array_key_exists('input_data', $data) && is_array($data['input_data'])
+            ? $data['input_data']
+            : (
+                array_key_exists('input_data', $data)
+                ? json_decode($data['input_data'], true)
+                : []
+            );
+    }
+
+    public function handle($data): array
+    {
+        $this->setInputData($data);
+
+        // Su código aquí
+
+        return [
+            // Respuesta que se enviará en el campo output_data
+            'response' => [],
+
+            // En las opciones puede configurar el evento y cola de respuesta que por defecto son
+            // background_request_result y api_gateway_queue.default respectivamente
+            // ej ['event' => 'new_event', 'queue' => 'new_queue', 'publish' => true, 'response_keys' = ['id', 'output_data']]
+            // con la propiedad publish puede hacer que no se envíe la respuesta por defecto se envía id, event, output_data
+            // con la propiedad response_keys puede definir que campos enviar en la respuesta
+            'options' => [],
+        ];
+    }
+}

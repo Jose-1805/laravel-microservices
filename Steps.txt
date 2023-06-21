@@ -1,0 +1,143 @@
+1. Publicar archivos de configuración inicial:
+    php artisan vendor:publish --tag=start-config-laravel-microservices
+2. Configure los valores del archivo config/microservices.php de acuerdo a sus necesidades
+3. Si es un api gateway y desea trabajar con permisos y roles de equipos publique el archivo de configuración con el siguiente comando y el key teams asigne true
+    php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag=permission-config
+4. Publicar archivos de configuración general:
+    php artisan vendor:publish --tag=laravel-microservices-config
+5. Establecer las siguientes variables de entorno en su archivo .env
+    RABBITMQ_HOST
+    RABBITMQ_PORT
+    RABBITMQ_USER
+    RABBITMQ_PASSWORD
+    RABBITMQ_VHOST
+
+    Opcionalmente puede configurar también 
+    
+    RABBITMQ_EXCHANGE               // Por defecto se asigna 'microservices.topic'
+    RABBITMQ_EXCHANGE_TYPE          // Por defecto se asigna 'topic'
+    RABBITMQ_INTERVAL_CONNECTION    // Por defecto se asigna 5
+
+    BACKGROUND_EVENT_RESPONSE  // Por defecto se asigna 'background_request_result'  
+    BACKGROUND_QUEUE_RESPONSE  // Por defecto se asigna 'api_gateway_queue.default'
+6.  Configure su archivo .env para la conexión con redis (datos de acceso, host, puerto, cliente. Si va a manejar sesión, cache, etc)
+7.  Configure adecuadamente los campos que requiera editar en los archivos config/microservices.php, config/background.php y config/amqp.php
+8.  Agregue "Amqp" => Bschmitt\Amqp\Facades\Amqp::class a la lista de aliases en el archivo config/app.php'
+9.  Si es un api gateway, configure si es necesario la migración establecida para la tabla de usuarios
+10.  Si es microservicio. agregue la configuración de la URL pública del api_gateway, esta configuración se agrega en el archivo config/services.php
+    y se establece para el manejo links en la paginación de modelos desde micro servicios
+    'api_gateway' => [
+        'public_url' => 'AQUÍ LA URL',
+    ]
+11. Si es un api gateway, agregue los middlewares de laravel permission en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,'
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,'
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,'
+12. Si es un api gateway y va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo app\Http\Kernel.php: \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,'        
+13. Agregar el trait ApiResponser y la función renderExceptions a la clase app/Exceptions/Hanlder.php para el manejo estandarizado de respuestas
+    use Jose1805\LaravelMicroservices\Traits\ApiResponser;
+
+    use ApiResponser;
+
+    public function render($request, Throwable $exception)
+    {
+        return $this->renderExceptions($request, $exception);
+    }
+14. Si es un servicio, agregue el midleware \Jose1805\LaravelMicroservices\Http\Middleware\Service\AuthenticateAccessMiddleware::class en la variable $middleware del archivo app\Http\Kernel.php
+    para validar que todas las peticiones contengan autenticación desde el api_gateway. Si solo desea validar algunas peticiones agregue el middleware 'auth_api_gateway' a las rutas que desea que tengan validación.
+15. Si es un api gateway, configure su modelo User para que extienda de Jose1805\LaravelMicroservices\Models\(User o UserUuid). Estas clases ya extiendes del Model de laravel y utilizan implementaciones y traits requeridos para el funcionamiento
+    correcto del paquete. Si es un servicio edite su modelo User con el siguiente código, si no utiliza uuids elimine del siguiente código la línea que contiene 'use HasUuids;'
+    <?php
+    namespace App\Models;
+    use Illuminate\Database\Eloquent\Concerns\HasUuids;
+    use Illuminate\Database\Eloquent\Model;
+    class User extends Model
+    {
+        use HasUuids;
+    }
+
+16. Si es un api gateway, configure el seeder database/seeders/RolesAndPermissionsSeeder.php. 
+    -   Establezca los permisos de su aplicación en la variable $permissions, tal cual como está en el ejemplo
+    -   Elimine, agregue o actualice las funciones de agregar roles y registrelas en la función run() de la clase
+17. Agregue las clases RolesAndPermissionsSeeder y UserAdmin al archivo DatabaseSeeder.php en el llamado a la función call si desea registrar sus roles y super administrador al ejecutar php artisan db:seed
+18. Si utiliza la configuración con uuids, en la migración de personal access tokens cambie $table->morphs("tokenable"); por $table->uuidMorphs("tokenable");
+19. Asegurese de haber configurado los variables de entorno para la conexión a la base de datos en su archivo.env
+20. Ejecute las migraciones de base de datos con php artisan migrate
+21. Ejecute los seeders que para agregar sus roles, permisos y super administrador con php artisan db:seed
+
+#####################################################################################################################
+############################################### API GATEWAY #########################################################
+#####################################################################################################################
+
+Para crear la configuración de un servicio nuevo
+    1. Primero cree el código base y la instalación del servicio para obtener un access_token para las
+    solicitudes desde al api_gateway al servicio, el access token se requieren en los siguientes pasos.
+    2. Ejecute el comando "php artisan lm:make-service-connection Name BaseUri AccessToken", el comando creará todos los recursos
+    necesarios para conectarse al servicio Name, el comando crea registros de configuración de acuerdo
+    al nombre asignado, para personalizar las variables puede ejecutar el comando con los parámetros opcionales:
+    "php artisan lm:make-service-connection Name BaseUri AccessToken --path=/example/path --queue=service_queue_name"
+    Ejemplo "php artisan lm:make-service-connection Contact http://contact_service access_token_1sdsd1f2sdf1 --path=/api/contact --queue=contact_service_queue"
+
+Para resolver trabajos en segundo plano
+    1. Ejecute el siguiente comando para crear y configurar una tarea para resolver en segundo plano
+            php artisan lm:make-resolver NombreTarea --event=nombre_evento
+
+        El comando creará un archivo app/Background/NombreTarea.php dentro de la clase incluida en el archivo encontrará
+        un método handle, que recibe el nombre del evento y los datos de la petición en segundo plano, realice las tareas
+        requeridas y retorne una respuesta que será enviada al api_gateway o servicio que solicitó la acción. El comando
+        también configura el archivo config/background.php para el que el evento recibido en --event se asocie a la clase NombreTarea
+
+    2. Para ejecutar un worker que reciba las solicitudes de ejecución en segundo plano ejecute el siguiente comando
+            php artisan lm:consume-amqp nombre_cola_servicio
+
+        Este comando se conectará a la cola que indique en nombre_cola_servicio (para el api gateway generalmente se utiliza api_gateway_queue.default) y de acuerdo al evento recibido ejecutará
+        el método handle de la clase asociada al evento en el archivo config/background.php. Si no existe el evento se registrará
+        un mensaje en el log.
+
+        En producción debe ejecutar este paquete en un administrador de procesos como supervisord con una configuración como la siguiente
+
+        [program:amqp_consumer]
+        process_name=%(program_name)s_%(process_num)02d
+        command=php -d variables_order=EGPCS /var/www/html/artisan consume:amqp api_gateway_queue.default
+        autostart=true
+        autorestart=true
+        stdout_logfile=/dev/stdout
+        stdout_logfile_maxbytes=0
+        stderr_logfile=/dev/stderr
+        stderr_logfile_maxbytes=0
+
+#####################################################################################################################
+################################################ SERVICIOS ##########################################################
+#####################################################################################################################
+
+Para crear un recurso
+    1. Para crear un recurso con modelo, requests, controlador y rutas ejecute el siguiente comando
+        php artisan lm:make-resource ResourceName
+
+Para resolver trabajos en segundo plano
+    1. Ejecute el siguiente comando para y configurar una tarea para resolver en segundo plano
+            php artisan lm:make-resolver NombreTarea --event=nombre_evento 
+    
+        El comando creará un archivo app/Background/NombreTarea.php dentro de la clase incluida en el archivo encontrará
+        un método handle, que recibe el nombre del evento y los datos de la petición en segundo plano, realice las tareas
+        requeridas y retorne una respuesta que será enviada al api_gateway o servicio que solicitó la acción. El comando
+        también configura el archivo config/background.php para el que el evento recibido en --event se asocie a la clase NombreTarea
+    
+    2. Para ejecutar un worker que reciba las solicitudes de ejecución en segundo plano ejecute el siguiente comando
+            php artisan lm:consume-amqp nombre_cola_servicio
+        
+        Este comando se conectará a la cola que indique en nombre_cola_servicio y de acuerdo al evento recibido ejecutará
+        el método handle de la clase asociada al evento en el archivo config/background.php. Si no existe el evento se registrara
+        un mensaje en el log.
+
+        En producción debe ejecutar este paquete en un administrador de procesos como supervisord con una configuración como la siguiente
+
+        [program:amqp_consumer]
+        process_name=%(program_name)s_%(process_num)02d
+        command=php -d variables_order=EGPCS /var/www/html/artisan consume:amqp api_gateway_queue.default
+        autostart=true
+        autorestart=true
+        stdout_logfile=/dev/stdout
+        stdout_logfile_maxbytes=0
+        stderr_logfile=/dev/stderr
+        stderr_logfile_maxbytes=0

@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\Store$CLASS_NAME$Request;
+use App\Http\Requests\Update$CLASS_NAME$Request;
+use Illuminate\Http\Request;
+use App\Models\$CLASS_NAME$;
+use Jose1805\LaravelMicroservices\Traits\ApiResponser;
+use Jose1805\LaravelMicroservices\Traits\PaginateModels;
+use Illuminate\Http\Response;
+
+class $CLASS_NAME$Controller extends Controller
+{
+    use ApiResponser;
+    use PaginateModels;
+
+    public function __construct()
+    {
+        // Middleware para asignar el usuario de la solicitud
+        $this->middleware('set_user_request');
+    }
+
+    /**
+     * Lista paginada de elementos
+     * el objecto $request puede contener (per_page, page, search, sort, direction)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        return $this->httpOkResponse(
+            $this->paginate($CLASS_NAME$::select('*'), $request)
+        );
+    }
+
+    /**
+     * Crea un registro del recurso
+     *
+     * @param  App\Http\Requests\Store$CLASS_NAME$Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Store$CLASS_NAME$Request $request)
+    {
+        $$RESOURCE_NAME$ = $CLASS_NAME$::create($request->all());
+        return $this->generateResponse($$RESOURCE_NAME$, Response::HTTP_CREATED);
+    }
+
+    /**
+     * Obtiene el recurso especificado
+     *
+     * @param  App\Models\$CLASS_NAME$  $$RESOURCE_NAME$
+     * @return \Illuminate\Http\Response
+     */
+    public function show($CLASS_NAME$ $$RESOURCE_NAME$)
+    {
+        return $this->httpOkResponse($$RESOURCE_NAME$);
+    }
+
+    /**
+     * Actualiza un recurso especifico
+     *
+     * @param  App\Http\Requests\Update$CLASS_NAME$Request  $request
+     * @param  App\Models\$CLASS_NAME$  $$RESOURCE_NAME$
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Update$CLASS_NAME$Request $request, $CLASS_NAME$ $$RESOURCE_NAME$)
+    {
+        $$RESOURCE_NAME$->update($request->all());
+        return $this->httpOkResponse($$RESOURCE_NAME$);
+    }
+
+    /**
+     * Elimina un recurso especifico
+     *
+     * @param  App\Models\$CLASS_NAME$  $$RESOURCE_NAME$
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($CLASS_NAME$ $$RESOURCE_NAME$)
+    {
+        $$RESOURCE_NAME$->delete();
+        return $this->httpOkResponse();
+    }
+}

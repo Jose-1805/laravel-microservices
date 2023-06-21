@@ -1,0 +1,36 @@
+{
+    "name": "jose-1805/laravel-microservices",
+    "description": "Paquete para desarrollar aplicaciones basadas en microservicios  (api gateway <-> microservices)",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.0",
+    "autoload": {
+        "psr-4": {
+            "Jose1805\\LaravelMicroservices\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "jose-1805",
+            "email": "joseluiscapotemosquera@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jose1805\\LaravelMicroservices\\Providers\\ServiceProvider",
+                "Bschmitt\\Amqp\\AmqpServiceProvider::class"
+            ]
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0"
+    },
+    "require": {
+        "bschmitt/laravel-amqp": "dev-master",
+        "laravel/sanctum": "^3.2",
+        "spatie/laravel-permission": "^5.10",
+        "predis/predis": "^2.2"
+    }
+}

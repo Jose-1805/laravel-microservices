@@ -1,0 +1,104 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Jose1805\LaravelMicroservices\Models\Service;
+use Jose1805\LaravelMicroservices\Traits\ApiResponser;
+use Illuminate\Http\Request;
+
+class $CLASS_NAME$Controller extends Controller
+{
+    use ApiResponser;
+
+    /**
+     * Objeto para consumir servicio
+     *
+     * @var Service
+     */
+    public $$SERVICE_NAME$;
+
+    public function __construct()
+    {
+        $this->$SERVICE_NAME$ = Service::where('name', '$SERVICE_NAME_SNAKE$')->first();
+        $this->middleware('auth:sanctum');
+        //$this->middleware('permission:name')->only(['func']);
+    }
+
+    /**
+     * Lista de elementos del servicio
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->$SERVICE_NAME$->getElements($request->all());
+
+        return $this->generateResponseByService($response);
+    }
+
+    /**
+     * Registro de un nuevo elemento en el servicio
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->$SERVICE_NAME$->createElement($request->all());
+        return $this->generateResponseByService($response);
+
+        // $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        // Ejemplo de ejecución en segundo plano
+        // return $this->$SERVICE_NAME$->resolveInBackground($request, 'create_element');
+    }
+
+    /**
+     * Obtiene el recurso especificado
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $id)
+    {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->$SERVICE_NAME$->getElement($id);
+        return $this->generateResponseByService($response);
+    }
+
+    /**
+     * Actualiza el recurso especificado
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->$SERVICE_NAME$->updateElement($id, $request->all());
+        return $this->generateResponseByService($response);
+
+        //$this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        //$request->merge(['id' => $id]);
+        //return $this->$SERVICE_NAME$->resolveInBackground($request, 'update_element');
+    }
+
+    /**
+     * Elimina el recurso especificado
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $id)
+    {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->$SERVICE_NAME$->destroy($id);
+        return $this->generateResponseByService($response);
+
+        //$this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        //$request->merge(['id' => $id]);
+        //return $this->$SERVICE_NAME$->resolveInBackground($request, 'delete_element');
+    }
+}

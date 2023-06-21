@@ -1,0 +1,32 @@
+<?php
+
+namespace Database\Seeders\services;
+
+use Jose1805\LaravelMicroservices\Models\Service;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class $CLASS_NAME$Seeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $service = Service::create([
+            'name' => '$SERVICE_NAME_SNAKE$',
+            'base_uri' => '$BASE_URI$',
+            'path' => '$PATH$',
+            'access_token' => '$ACCESS_TOKEN$',
+            'queue' => '$QUEUE$',
+        ]);
+        echo PHP_EOL.'  SERVICIO CREADO CON ÉXITO !!'.PHP_EOL;
+        echo '      NAME:          $SERVICE_NAME_SNAKE$'.PHP_EOL;
+        echo '      BASE_URI:      $BASE_URI$'.PHP_EOL;
+        echo '      PATH:          $PATH$'.PHP_EOL;
+        echo '      ACCESS_TOKEN:  $ACCESS_TOKEN$'.PHP_EOL;
+        echo '      QUEUE:         $QUEUE$'.PHP_EOL.PHP_EOL;
+        echo '  Guarde de forma segura el siguiente token de acceso en el servicio'.PHP_EOL;
+        echo '  '.$service->createToken('services')->plainTextToken.PHP_EOL.PHP_EOL.PHP_EOL;
+    }
+}
