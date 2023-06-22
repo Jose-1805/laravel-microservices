@@ -20,7 +20,7 @@
         "laravel": {
             "providers": [
                 "Jose1805\\LaravelMicroservices\\Providers\\ServiceProvider",
-                "Bschmitt\\Amqp\\AmqpServiceProvider::class"
+                "Bschmitt\\Amqp\\AmqpServiceProvider"
             ]
         }
     },
