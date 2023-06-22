@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the 'api' middleware group. Make something great!
 |
 */
-// Middleware para autenticar usuarios enviados desde otros servicios
-Route::prefix('api')->middleware(['auth_service_user'])->group(function () {
-    Route::post('/logout', [AuthenticationController::class, 'logoutToken']);
+// Middleware para autenticar usuarios enviados desde otros servicios y para validar equipo
+Route::prefix('api')->middleware(array_merge(['auth_service_user'], (config('permission.teams') ? ['teams'] : [])))->group(function () {
     Route::post('/token', [AuthenticationController::class, 'token']);
+    Route::post('/logout', [AuthenticationController::class, 'logoutToken']);
     Route::get('/background-request-result/{id}/{event}', fn (Request $request, $id, $event) => BackgroundRequest::result($id, $event, $request->user()->id))->middleware('auth:sanctum');
     Route::get('/user-data', [AuthenticationController::class, 'authUserData']);
 });

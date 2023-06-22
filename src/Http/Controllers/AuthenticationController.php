@@ -8,10 +8,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Jose1805\LaravelMicroservices\Traits\Teams;
 
 class AuthenticationController extends Controller
 {
     use ApiResponser;
+    use Teams;
 
     public function __construct()
     {
@@ -50,7 +52,13 @@ class AuthenticationController extends Controller
                 ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return $this->httpOkResponse(['token' => $user->createToken($request->device_name)->plainTextToken, 'user' => $user]);
+        $response = ['token' => $user->createToken($request->device_name)->plainTextToken, 'user' => $user];
+
+        if(config('permission.teams')) {
+            $response['teams'] = $this->getTeams($user->id);
+        }
+
+        return $this->httpOkResponse($response);
     }
 
     /**
