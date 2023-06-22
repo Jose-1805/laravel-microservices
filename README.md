@@ -12,11 +12,13 @@ composer require jose-1805/laravel-microservices
 
 ## API GATEWAY
 
-### CONFIGURACIÓN API GATEWAY
+## Configuración api gateway
 
 Para configurar su api gateway realice los siguientes pasos para establecer la configuración necesaria
 
-1. Publique el archivo de configuración inicial con el siguiente comando:
+### Paso #1
+
+Publique el archivo de configuración inicial con el siguiente comando:
 
 ```
 php artisan vendor:publish --tag=start-config-laravel-microservices
@@ -24,7 +26,9 @@ php artisan vendor:publish --tag=start-config-laravel-microservices
 
 Se publicará un archivo de configuración llamado `microservices.php̣` en el directorio config de su proyecto, establezca el valor de la clave `is_api_gateway` en `true`. El paquete utiliza uuids por defecto para configurar la librería de `laravel-permission` y el modelo User, si desea utilizar identificadores enteros auto incrementables configure el valor de la clave `use_uuid` en `false`.
 
-2. Si desea trabajar con equipos para el manejo de roles y permisos publique el archivo de configuración de `laravel-permission` con el siguiente comando:
+### Paso #2
+
+Si desea trabajar con equipos para el manejo de roles y permisos publique el archivo de configuración de `laravel-permission` con el siguiente comando:
 
 ```
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag=permission-config
@@ -32,7 +36,9 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
 
 Se publicará un archivo de configuración llamado `permission.php` en el directorio `config` de su proyecto, establezca el valor de la clave `teams` en `true`.
 
-3. Con la configuración realizada, ahora puede publicar los archivos de configuración general del paquete con el siguiente comando:
+### Paso #3
+
+Con la configuración realizada, ahora puede publicar los archivos de configuración general del paquete con el siguiente comando:
 
 ```
 php artisan vendor:publish --tag=laravel-microservices-config
@@ -60,7 +66,9 @@ Este archivo contiene la configuración para registrar su primer usuario Super A
 
 Agregue las clases `RolesAndPermissionsSeeder` y `UserAdmin` al archivo `DatabaseSeeder.php` en el llamado a la función `call` si desea registrar sus roles y super administrador al ejecutar `php artisan db:seed`
 
-4. Configure las siguientes variables de entorno en su archivo `.env`
+### Paso #4
+
+Configure las siguientes variables de entorno en su archivo `.env`
 
 Configuración para conexión a rabbit mq
 
@@ -91,13 +99,17 @@ Configure su archivo las variables para la conexión con redis (datos de acceso,
 
 Configure las variables de entorno de acceso a la base de datos
 
-5.  Agregue a la lista de aliases del archivo `config/app.php` la siguiente configuración para la clase de administración de Rabbit Mq
+### Paso #5
+
+Agregue a la lista de aliases del archivo `config/app.php` la siguiente configuración para la clase de administración de Rabbit Mq
 
 ```
 'Amqp' => Bschmitt\Amqp\Facades\Amqp::class
 ```
 
-6. Agregue los middlewares de laravel permission en el archivo `app\Http\Kernel.php` en la variable `$middlewareAliases`
+### Paso #6
+
+Agregue los middlewares de laravel permission en el archivo `app\Http\Kernel.php` en la variable `$middlewareAliases`
 
 ```
 'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,'
@@ -105,14 +117,18 @@ Configure las variables de entorno de acceso a la base de datos
 'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,'
 ```
 
-7. Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo `app\Http\Kernel.php`
+### Paso #7
+
+Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo `app\Http\Kernel.php`
 
 ```
 \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
 ```
 
-8. Agregar el trait `ApiResponser` y la función `renderExceptions` a la clase `app/Exceptions/Hanlder.php` para el manejo estandarizado de respuestas
-   Antes de la declaración de la clase
+### Paso #8
+
+Agregar el trait `ApiResponser` y la función `renderExceptions` a la clase `app/Exceptions/Hanlder.php` para el manejo estandarizado de respuestas.
+Antes de la declaración de la clase
 
 ```
 use Jose1805\LaravelMicroservices\Traits\ApiResponser;
@@ -129,28 +145,39 @@ public function render($request, Throwable $exception)
 }
 ```
 
-9. Configure su modelo `User` para que extienda de `Jose1805\LaravelMicroservices\Models\(User o UserUuid)`. Estas clases ya extienden del `Model` de laravel y utilizan implementaciones y traits requeridos para el funcionamiento correcto de este paquete.
+### Paso #9
 
-10. Si utiliza la configuración con uuids, en la migración de personal access tokens cambie `$table->morphs("tokenable");` por `$table->uuidMorphs("tokenable");`
+Configure su modelo `User` para que extienda de `Jose1805\LaravelMicroservices\Models\(User o UserUuid)`. Estas clases ya extienden del `Model` de laravel y utilizan implementaciones y traits requeridos para el funcionamiento correcto de este paquete.
 
-11. Ejecute las migraciones de base de datos con
+### Paso #10
+
+Si utiliza la configuración con uuids, en la migración de personal access tokens cambie `$table->morphs("tokenable");` por `$table->uuidMorphs("tokenable");`
+
+### Paso #11
+
+Ejecute las migraciones de base de datos con
 
 ```
 php artisan migrate
 ```
 
-12. Ejecute los seeders que para agregar sus roles, permisos y super administrador con
+### Paso #12
+
+Ejecute los seeders que para agregar sus roles, permisos y super administrador con
 
 ```
 php artisan db:seed
 ```
 
-13. Puede agrupar todas sus rutas o las que desee con el middleware `teams` que se encarga de validar que las peticiones de un usuario autenticado contengan el header `Team-Id` para establecer el equipo asociado al usuario en la sesión actual
+### Paso #13
 
-### COMANDOS PARA API GATEWAY
+Puede agrupar todas sus rutas o las que desee con el middleware `teams` que se encarga de validar que las peticiones de un usuario autenticado contengan el header `Team-Id` para establecer el equipo asociado al usuario en la sesión actual
+
+## Comandos para api gateway
 
 Este paquete contiene algunos comandos artisan útiles dentro del proceso de desarrollo y la puesta en marcha del proyecto
 
+### Worker RabbitMQ
 ```
 php artisan lm:consume-amqp queue-name
 ```
@@ -168,14 +195,14 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 ```
-
+### Tareas en segundo plano
 ```
 php artisan lm:make-resolver NombreTarea event=event-name
 ```
 
 Ejecute este comando para crear y configurar una tarea para resolver en segundo plano, por lo general esto no se requiere en el api gateway ya que el evento `background_request_result` viene con una implementación definida en el paquete la cual actualiza la información de la solicitud en la base de datos (tabla `background_requests`).
 El comando creará un archivo `app/Background/NombreTarea.php`, dentro de la clase incluida en el archivo encontrará un método `handle`, que recibe el nombre del evento y los datos de la petición en segundo plano, realice las tareas requeridas y retorne una respuesta que será enviada al servicio que solicitó la acción. El comando también configura el archivo `config/background.php` para que el evento recibido en `--event` se asocie a la clase `NombreTarea`
-
+### Conexión a micro servicios
 ```
 php artisan lm:make-service-connection
 ```
@@ -189,29 +216,31 @@ Este comando crea los recursos y configuraciones necesarias para establecer una 
 php artisan lm:make-service-connection Contact http://contact_service access_token_1sdsd1f2sdf1 --path=/api/contact --queue=contact_service_queue
 ```
 
-### RUTAS DE API GATEWAY
+## Rutas de api gateway
 
 El paquete incluye cuatro rutas importantes para la ejecución del proyecto
 
-`(POST) /api/token`
+### (POST) /api/token
 Esta ruta se utiliza para obtener un token de acceso al sistema a través de las credenciales del usuario. Recibe como parámetros `email, password y device_name`. Si los datos son correctos la ruta retorna el token del usuario en la clave `token`, los datos básicos del usuario en la clave `user` y si activó el manejo de roles y permisos con equipos recibirá los identificadores de los equipos asociados al cliente en la clave `teams`. en cada solicitud debe enviar un header `Team-Id` con el valor del id del equipo que se debe utilizar para consultar la información del usuario.
 
-`(POST) /api/logout`
+### (POST) /api/logout
 Esta ruta cierra la sesión del usuario eliminando el `token` que se envía en la solicitud.
 
-`(GET) /api/background-request-result/{id}/{event}`
+### (GET) /api/background-request-result/{id}/{event}
 Esta ruta permite la consulta del estado actual de una solicitud en segundo plano, recibe el id de la solicitud y el nombre del evento asociado. El usuario debe estar autenticado y solo puede consultar solicitudes que han sido registradas por él. Una vez que la tarea a finalizado se elimina automáticamente después de que se realiza la primera consulta de su nuevo estado.
 
-`(GET) /api/user-data`
+### (GET) /api/user-data
 Esta ruta permite la consulta de la información completa del usuario
 
 ## MICROSERVICES
 
-### CONFIGURACIÓN MICRO SERVICIOS
+## Configuración micro servicios
 
 Para configurar un micro servicio realice los siguientes pasos para establecer la configuración necesaria
 
-1. Publique el archivo de configuración inicial con el siguiente comando
+### Paso #1
+
+Publique el archivo de configuración inicial con el siguiente comando
 
 ```
 php artisan vendor:publish --tag=start-config-laravel-microservices
@@ -219,7 +248,9 @@ php artisan vendor:publish --tag=start-config-laravel-microservices
 
 Se publicará un archivo de configuración llamado `microservices.php` en el directorio `config` de su proyecto, por ahora no debe realizar ningún cambio en este archivo pero puede revisarlo para entender mejor algunos de los siguientes pasos, el key `use_uuid` no se utiliza en los micro servicios.
 
-2. Publique los archivos de configuración general del paquete
+### Paso #2
+
+Publique los archivos de configuración general del paquete
 
 ```
 php artisan vendor:publish --tag=laravel-microservices-config
@@ -230,7 +261,9 @@ Se publicará el siguiente archivo en su proyecto:
 `config/background.php`
 Este archivo contiene la configuración para resolver las solicitudes en segundo plano, dentro de él encontrará inicialmente el key `events` que se encarga de asociar un evento (un evento es el nombre asignado a una solicitud en segundo plano) con un el nombre de la clase que se ejecutará al recibir dicho evento. En la sección de comandos para micro servicios se explica como se crean los eventos y las clases asociadas.
 
-3. Configure las siguientes variables de entorno en su archivo `.env`
+### Paso #3
+
+Configure las siguientes variables de entorno en su archivo `.env`
 
 Configuración para conexión a rabbit mq
 
@@ -261,13 +294,17 @@ Configure su archivo las variables para la conexión con redis (datos de acceso,
 
 Configure las variables de entorno de acceso a la base de datos
 
-4.  Agregue a la lista de aliases del archivo `config/app.php` la siguiente configuración para la clase de administración de Rabbit Mq
+### Paso #4
+
+Agregue a la lista de aliases del archivo `config/app.php` la siguiente configuración para la clase de administración de Rabbit Mq
 
 ```
 'Amqp' => Bschmitt\Amqp\Facades\Amqp::class
 ```
 
-5.  Agregue la configuración de la URL pública del api_gateway, esta configuración se agrega en el archivo `config/services.php` y se establece para el manejo links en la paginación de modelos desde micro servicios
+### Paso #5
+
+Agregue la configuración de la URL pública del api_gateway, esta configuración se agrega en el archivo `config/services.php` y se establece para el manejo links en la paginación de modelos desde micro servicios
 
 ```
 'api_gateway' => [
@@ -275,8 +312,10 @@ Configure las variables de entorno de acceso a la base de datos
 ]
 ```
 
-6.  Agregar el trait `ApiResponser` y la función renderExceptions a la clase `app/Exceptions/Hanlder.php` para el manejo estandarizado de respuestas
-    Antes de la clase
+### Paso #6
+
+Agregar el trait `ApiResponser` y la función renderExceptions a la clase `app/Exceptions/Hanlder.php` para el manejo estandarizado de respuestas
+Antes de la clase
 
 ```
 use Jose1805\LaravelMicroservices\Traits\ApiResponser;
@@ -293,9 +332,13 @@ public function render($request, Throwable $exception)
 }
 ```
 
-7.  Agregue el midleware `\Jose1805\LaravelMicroservices\Http\Middleware\Service\AuthenticateAccessMiddleware::class` en la variable `$middleware` del archivo `app\Http\Kernel.php` para validar que todas las peticiones contengan autenticación desde el api_gateway. Si solo desea validar algunas peticiones agregue el middleware `auth_api_gateway` a las rutas que desea que tengan validación.
+### Paso #7
 
-8.  Edite su modelo `User` con el siguiente código, si no utiliza uuids elimine del siguiente código la línea que contiene `use HasUuids;`
+Agregue el midleware `\Jose1805\LaravelMicroservices\Http\Middleware\Service\AuthenticateAccessMiddleware::class` en la variable `$middleware` del archivo `app\Http\Kernel.php` para validar que todas las peticiones contengan autenticación desde el api_gateway. Si solo desea validar algunas peticiones agregue el middleware `auth_api_gateway` a las rutas que desea que tengan validación.
+
+### Paso #8
+
+Edite su modelo `User` con el siguiente código, si no utiliza uuids elimine del siguiente código la línea que contiene `use HasUuids;`
 
 ```
 <?php
@@ -308,10 +351,10 @@ class User extends Model
 }
 ```
 
-### COMANDOS PARA MICRO SERVICIOS
+## Comandos para micro servicios
 
 Este paquete contiene algunos comandos artisan útiles dentro del proceso de desarrollo y la puesta en marcha del proyecto
-
+### Worker RabbitMQ
 ```
 php artisan lm:consume-amqp queue-name
 ```
@@ -329,20 +372,20 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 ```
-
+### Tokens de acceso
 ```
 php artisan lm:make-access-token
 ```
 
 Este comando crea un nuevo token de acceso al servicio y lo registra automáticamente en su archivo `.env`, debe utilizar un token creado con este comando para configurar un servicio el el api gateway
-
+### Tareas en segundo plano
 ```
 php artisan lm:make-resolver NombreTarea event=event-name
 ```
 
 Ejecute el siguiente comando para crear y configurar una tarea para resolver en segundo plano.
 El comando creará un archivo `app/Background/NombreTarea.php`, dentro de la clase incluida en el archivo encontrará un método `handle`, que recibe el nombre del evento y los datos de la petición en segundo plano, realice las tareas requeridas y retorne una respuesta que será enviada al api gateway. El comando también configura el archivo `config/background.php` para que el evento recibido en `--event` se asocie a la clase `NombreTarea`.
-
+### Creación de recursos del servicio
 ```
  php artisan lm:make-resource ResourceName route=/example/example
 ```
