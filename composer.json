@@ -28,7 +28,7 @@
         "orchestra/testbench": "^8.0"
     },
     "require": {
-        "bschmitt/laravel-amqp": "dev-master",
+        "bschmitt/laravel-amqp": "^2.1",
         "laravel/sanctum": "^3.2",
         "spatie/laravel-permission": "^5.10",
         "predis/predis": "^2.2"
