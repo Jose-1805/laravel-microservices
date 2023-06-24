@@ -2,7 +2,7 @@
 
 namespace Jose1805\LaravelMicroservices\Http\Controllers;
 
-use Jose1805\LaravelMicroservices\Models\User;
+use App\Models\User;
 use Jose1805\LaravelMicroservices\Traits\ApiResponser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -3,7 +3,7 @@
 namespace Jose1805\LaravelMicroservices\Http\Middleware\ApiGateway;
 
 use Jose1805\LaravelMicroservices\Models\Service;
-use Jose1805\LaravelMicroservices\Models\User;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;

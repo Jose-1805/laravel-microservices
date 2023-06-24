@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable as AccessAuthorizable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Model implements Authorizable
+class UserUuid extends Model implements Authorizable
 {
     use HasFactory;
     use HasApiTokens;
