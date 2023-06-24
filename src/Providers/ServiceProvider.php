@@ -53,6 +53,11 @@ class ServiceProvider extends SP
             __DIR__.'/../../config/background_'.$this->getTargetName().'.php',
             'background'
         );
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../../config/amqp.php',
+            'amqp'
+        );
     }
 
     public function boot()
