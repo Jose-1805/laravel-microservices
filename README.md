@@ -112,9 +112,9 @@ Agregue a la lista de aliases del archivo `config/app.php` la siguiente configur
 Agregue los middlewares de laravel permission en el archivo `app\Http\Kernel.php` en la variable `$middlewareAliases`
 
 ```
-'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,'
-'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,'
-'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,'
+'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
 ```
 
 ### Paso #7
@@ -178,6 +178,7 @@ Puede agrupar todas sus rutas o las que desee con el middleware `teams` que se e
 Este paquete contiene algunos comandos artisan útiles dentro del proceso de desarrollo y la puesta en marcha del proyecto
 
 ### Worker RabbitMQ
+
 ```
 php artisan lm:consume-amqp queue-name
 ```
@@ -195,14 +196,18 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 ```
+
 ### Tareas en segundo plano
+
 ```
 php artisan lm:make-resolver NombreTarea event=event-name
 ```
 
 Ejecute este comando para crear y configurar una tarea para resolver en segundo plano, por lo general esto no se requiere en el api gateway ya que el evento `background_request_result` viene con una implementación definida en el paquete la cual actualiza la información de la solicitud en la base de datos (tabla `background_requests`).
 El comando creará un archivo `app/Background/NombreTarea.php`, dentro de la clase incluida en el archivo encontrará un método `handle`, que recibe el nombre del evento y los datos de la petición en segundo plano, realice las tareas requeridas y retorne una respuesta que será enviada al servicio que solicitó la acción. El comando también configura el archivo `config/background.php` para que el evento recibido en `--event` se asocie a la clase `NombreTarea`
+
 ### Conexión a micro servicios
+
 ```
 php artisan lm:make-service-connection
 ```
@@ -221,15 +226,19 @@ php artisan lm:make-service-connection Contact http://contact_service access_tok
 El paquete incluye cuatro rutas importantes para la ejecución del proyecto
 
 ### (POST) /api/token
+
 Esta ruta se utiliza para obtener un token de acceso al sistema a través de las credenciales del usuario. Recibe como parámetros `email, password y device_name`. Si los datos son correctos la ruta retorna el token del usuario en la clave `token`, los datos básicos del usuario en la clave `user` y si activó el manejo de roles y permisos con equipos recibirá los identificadores de los equipos asociados al cliente en la clave `teams`. en cada solicitud debe enviar un header `Team-Id` con el valor del id del equipo que se debe utilizar para consultar la información del usuario.
 
 ### (POST) /api/logout
+
 Esta ruta cierra la sesión del usuario eliminando el `token` que se envía en la solicitud.
 
 ### (GET) /api/background-request-result/{id}/{event}
+
 Esta ruta permite la consulta del estado actual de una solicitud en segundo plano, recibe el id de la solicitud y el nombre del evento asociado. El usuario debe estar autenticado y solo puede consultar solicitudes que han sido registradas por él. Una vez que la tarea a finalizado se elimina automáticamente después de que se realiza la primera consulta de su nuevo estado.
 
 ### (GET) /api/user-data
+
 Esta ruta permite la consulta de la información completa del usuario
 
 ## MICROSERVICES
@@ -354,7 +363,9 @@ class User extends Model
 ## Comandos para micro servicios
 
 Este paquete contiene algunos comandos artisan útiles dentro del proceso de desarrollo y la puesta en marcha del proyecto
+
 ### Worker RabbitMQ
+
 ```
 php artisan lm:consume-amqp queue-name
 ```
@@ -372,20 +383,26 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 ```
+
 ### Tokens de acceso
+
 ```
 php artisan lm:make-access-token
 ```
 
 Este comando crea un nuevo token de acceso al servicio y lo registra automáticamente en su archivo `.env`, debe utilizar un token creado con este comando para configurar un servicio el el api gateway
+
 ### Tareas en segundo plano
+
 ```
 php artisan lm:make-resolver NombreTarea event=event-name
 ```
 
 Ejecute el siguiente comando para crear y configurar una tarea para resolver en segundo plano.
 El comando creará un archivo `app/Background/NombreTarea.php`, dentro de la clase incluida en el archivo encontrará un método `handle`, que recibe el nombre del evento y los datos de la petición en segundo plano, realice las tareas requeridas y retorne una respuesta que será enviada al api gateway. El comando también configura el archivo `config/background.php` para que el evento recibido en `--event` se asocie a la clase `NombreTarea`.
+
 ### Creación de recursos del servicio
+
 ```
  php artisan lm:make-resource ResourceName route=/example/example
 ```
