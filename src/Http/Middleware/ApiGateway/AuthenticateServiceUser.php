@@ -60,7 +60,7 @@ class AuthenticateServiceUser
                 // Existe un token de usuario
             } elseif($token->tokenable_type == User::class) {
                 $user = User::find($token->tokenable_id);
-
+                $user->withAccessToken($token);
                 $request->setUserResolver(function () use ($user) {
                     return $user;
                 });
