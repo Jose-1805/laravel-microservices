@@ -39,7 +39,7 @@ class UserUuid extends Model implements Authorizable
      *
      * @return void
      */
-    public function allData(): User
+    public function allData(): UserUuid
     {
         $this->role_data = $this->roles()->select('roles.id', 'roles.name')->with('permissions:id,name')->get();
         $this->permissions;
