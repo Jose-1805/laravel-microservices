@@ -18,7 +18,7 @@ class TeamsPermission
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!empty(auth()->user())) {
+        if($request->user()) {
             $team_id = $request->headers->get('Team-Id');
 
             //Siempre se requiere el nombre del equipo
