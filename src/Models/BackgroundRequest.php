@@ -2,6 +2,7 @@
 
 namespace Jose1805\LaravelMicroservices\Models;
 
+use Jose1805\LaravelMicroservices\Enums\BackgroundRequestState;
 use Jose1805\LaravelMicroservices\Traits\ApiResponser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -17,6 +18,7 @@ class BackgroundRequest extends Model
     protected $casts = [
         'input_data' => 'json',
         'output_data' => 'json',
+        'state' => BackgroundRequestState::class,
     ];
 
     /**

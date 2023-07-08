@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('tokens', function (Blueprint $table) {
             $table->uuid('id')->unique()->comment('Identificador único de cada registro');
-            $table->enum('type', ['fcm'])->comment('Tipo de token registrado');
+            $table->enum('type', ['f'])->comment('Tipo de token registrado f = Fcm (Firebase cloud messaging)');
             $table->string('token', 250)->unique()->comment('Token registrado');
             $table->foreignUuid('user_id')
                 ->comment('Relación al usuario asociado al token')

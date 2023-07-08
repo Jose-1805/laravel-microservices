@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace Jose1805\LaravelMicroservices\Helpers;
 
 use Illuminate\Filesystem\Filesystem;
 
