@@ -156,7 +156,7 @@ class ServiceConnectionCommand extends Command
         $content = '';
         while ($line = fgets($file)) {
             if (str_contains($line, 'use ') && !$use_is_added) {
-                $content .= 'use App\Http\Controllers\\$controller_name;'.PHP_EOL;
+                $content .= 'use App\Http\Controllers\\'.$controller_name.';'.PHP_EOL;
                 $use_is_added = true;
             }
             $content .= $line;
