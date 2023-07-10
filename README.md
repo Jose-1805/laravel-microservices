@@ -314,7 +314,22 @@ BACKGROUND_EVENT_RESPONSE  // Por defecto se asigna 'background_request_result'
 BACKGROUND_QUEUE_RESPONSE  // Por defecto se asigna 'api_gateway_queue.default'
 ```
 
-Configure su archivo las variables para la conexión con redis (datos de acceso, host, puerto, cliente. Si va a manejar sesión, cache, etc)
+Este paquete contiene la instalación de `predis/predis` para la conexión a Redis, configure su archivo .env con las variables mínimas para la conexión con redis:
+
+```
+REDIS_HOST // Url del servidor o nombre del contenedor donde se encuentra instalado Redis
+REDIS_PASSWORD // Contraseña de acceso al redis
+REDIS_PORT // Puerto habilitado para la conexión con redis
+REDIS_CLIENT // Cliente para manejo de conexiones, si no tiene instalada la extensión de phpredis puede utilizar predis/predis que es un paquete que no requiere la instalación de la extensión phpredis
+```
+
+Ahora que ha configurado la conexión a redis puede asignar redis como driver para cache, sesión y/o colas
+
+```
+CACHE_DRIVER=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+```
 
 Configure las variables de entorno de acceso a la base de datos
 
