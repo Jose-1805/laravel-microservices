@@ -236,6 +236,8 @@ Este comando crea los recursos y configuraciones necesarias para establecer una 
 php artisan lm:make-service-connection Contact http://contact_service access_token_1sdsd1f2sdf1 --path=/api/contact --queue=contact_service_queue
 ```
 
+Una vez que se ejecute el comando, se registrará un seed en su directorio `database/seeders/service` y las instrucciones de ejecución del seed. Cuando ejecute el seed su servicio se almacenará en la base de datos y se crea un token de acceso que tendrá que almacenar en su micro servicio para permitir las solicitudes desde el micro servicio hacia el api gateway.
+
 ## Rutas de api gateway
 
 El paquete incluye cuatro rutas importantes para la ejecución del proyecto
@@ -343,13 +345,19 @@ Agregue a la lista de aliases del archivo `config/app.php` la siguiente configur
 
 ### Paso #5
 
-Agregue la configuración de la URL pública del api_gateway, esta configuración se agrega en el archivo `config/services.php` y se establece para el manejo links en la paginación de modelos desde micro servicios
+Agregue la configuración de acceso al api gateway, esta configuración se agrega en el archivo `config/services.php`. En su archivo `.env` debe definir las variables de entorno `API_GATEWAY_PUBLIC_URL, API_GATEWAY_BASE_URI` y `API_GATEWAY_ACCESS_TOKEN`
 
 ```
 'api_gateway' => [
-    'public_url' => 'AQUÍ LA URL',
+    'public_url' => env('API_GATEWAY_PUBLIC_URL'),
+    'base_uri' => env('API_GATEWAY_BASE_URI'),
+    'access_token' => env('API_GATEWAY_ACCESS_TOKEN'),
 ]
 ```
+
+`API_GATEWAY_PUBLIC_URL:` Esta es la url pública del api gateway, se utiliza para agregarla en la paginación de los modelos.</br>
+`API_GATEWAY_BASE_URI:` Esta es la url que se utiliza para que los micro servicios creados realicen solicitudes a api gateway.</br>
+`API_GATEWAY_ACCESS_TOKEN:` Este es el token de acceso al api gateway desde el micro servicio, este token se obtiene en el api gateway cuando se registra el micro servicio en la base de datos.</br>
 
 ### Paso #6
 
