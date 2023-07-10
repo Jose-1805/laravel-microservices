@@ -58,7 +58,7 @@ class MakeResourceCommand extends Command
 
 
         $this->comment('Creando controlador ...');
-        $path_stub_controller = __DIR__ . '/../../../stubs/controller-resource.stub';
+        $path_stub_controller = __DIR__ . '/../../../../stubs/Service/controller-resource.stub';
         $formatter_controller = new StubFormatter(
             $path_controller,
             $this->getStubVariables(),

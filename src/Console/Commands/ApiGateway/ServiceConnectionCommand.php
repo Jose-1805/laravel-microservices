@@ -171,7 +171,7 @@ class ServiceConnectionCommand extends Command
     public function makeController($path_controller)
     {
         $this->comment('Creando controlador ...');
-        $path_stub_controller = __DIR__ . '/../../../stubs/service-controller.stub';
+        $path_stub_controller = __DIR__ . '/../../../../stubs/ApiGateway/service-controller.stub';
         $formatter_controller = new StubFormatter(
             $path_controller,
             $this->getStubVariables(),
@@ -190,7 +190,7 @@ class ServiceConnectionCommand extends Command
     public function makeSeeder($path_seeder)
     {
         $this->comment('Creando seeder ...');
-        $path_stub_seeder = __DIR__ . '/../../../stubs/service-seeder.stub';
+        $path_stub_seeder = __DIR__ . '/../../../../stubs/ApiGateway/service-seeder.stub';
         $formatter_controller = new StubFormatter(
             $path_seeder,
             $this->getStubVariables(),
