@@ -202,9 +202,9 @@ class ServiceConnectionCommand extends Command
         $this->info('Seeder creado con éxito'.PHP_EOL);
         $this->info('Para ejecutar el seeder y agregar a la base de datos ejecuta uno de los siguientes comandos:'.PHP_EOL);
         $this->info('*  Para agregar solo este servicio');
-        $this->info('php artisan db:seed --class=Database\\Seeders\\services\\'.$this->getClassName($this->argument('name')).'Seeder');
+        $this->info('php artisan db:seed --class=Database\\\\Seeders\\\\services\\\\'.$this->getClassName($this->argument('name')).'Seeder');
         $this->info('*  Para agregar todos los servicios creados');
-        $this->info('php artisan db:seed --class=Database\\Seeders\\services\\AllServices');
+        $this->info('php artisan db:seed --class=Database\\\\Seeders\\\\services\\\\AllServices');
     }
 
     /**
