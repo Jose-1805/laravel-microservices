@@ -2,6 +2,7 @@
 
 namespace Jose1805\LaravelMicroservices\Traits;
 
+use Jose1805\LaravelMicroservices\Enums\BackgroundRequestState;
 use Jose1805\LaravelMicroservices\Models\BackgroundRequest;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,7 @@ trait BackgroundRequestGenerator
         $user = $request->user() ? $request->user()->id : null;
         $background_request = BackgroundRequest::create([
             'event' => $event,
-            'state' => '0',
+            'state' => BackgroundRequestState::InQueue,
             'input_data' => $this->requestToJson($request),
             'user_id' => $user
         ]);

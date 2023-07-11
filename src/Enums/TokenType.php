@@ -2,7 +2,7 @@
 
 namespace Jose1805\LaravelMicroservices\Enums;
 
-enum TokenType
+enum TokenType: string
 {
     case Fcm = 'f';
 }
