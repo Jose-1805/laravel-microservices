@@ -442,7 +442,7 @@ El comando creará un archivo `app/Background/NombreTarea.php`, dentro de la cla
 ### Creación de recursos del servicio
 
 ```
- php artisan lm:make-resource ResourceName route=/example/example
+ php artisan lm:make-resource ResourceName --route=/example/example
 ```
 
-Este comando se utiliza para crear un recurso con modelo, requests, controlador y rutas. El argumento `route` no es obligatorio, si no lo envía el sistema asigna automáticamente la ruta de acuerdo al nombre del recurso, si el resultado no es el esperado puede cambiar esto directamente en su archivo de rutas.
+Este comando se utiliza para crear un recurso con modelo, requests, controlador y rutas. El argumento `--route` no es obligatorio, si no lo envía el sistema asigna automáticamente la ruta de acuerdo al nombre del recurso, si el resultado no es el esperado puede cambiar esto directamente en su archivo de rutas.
