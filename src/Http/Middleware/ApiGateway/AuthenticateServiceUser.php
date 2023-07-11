@@ -2,6 +2,7 @@
 
 namespace Jose1805\LaravelMicroservices\Http\Middleware\ApiGateway;
 
+use Illuminate\Support\Facades\Config;
 use Jose1805\LaravelMicroservices\Models\Service;
 use App\Models\User;
 use Closure;
@@ -20,6 +21,7 @@ class AuthenticateServiceUser
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
+        Config::set('request_from_micro_service', false);
         if($user) {
             // Usuario logueado correctamente
             if(get_class($user) == User::class) {
@@ -28,6 +30,8 @@ class AuthenticateServiceUser
 
             // La petición se realizó desde un servicio
             if(get_class($user) == Service::class) {
+                Config::set('request_from_micro_service', true);
+
                 // La petición se realiza a nombre de un usuario
                 if($request->header('UserId')) {
                     $user = User::findOrFail($request->header('UserId'));
