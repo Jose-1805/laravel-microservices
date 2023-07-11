@@ -215,7 +215,7 @@ stderr_logfile_maxbytes=0
 ### Tareas en segundo plano
 
 ```
-php artisan lm:make-resolver NombreTarea event=event-name
+php artisan lm:make-resolver NombreTarea --event=event-name
 ```
 
 Ejecute este comando para crear y configurar una tarea para resolver en segundo plano, por lo general esto no se requiere en el api gateway ya que el evento `background_request_result` viene con una implementación definida en el paquete la cual actualiza la información de la solicitud en la base de datos (tabla `background_requests`).
@@ -433,7 +433,7 @@ Este comando crea un nuevo token de acceso al servicio y lo registra automática
 ### Tareas en segundo plano
 
 ```
-php artisan lm:make-resolver NombreTarea event=event-name
+php artisan lm:make-resolver NombreTarea --event=event-name
 ```
 
 Ejecute el siguiente comando para crear y configurar una tarea para resolver en segundo plano.
