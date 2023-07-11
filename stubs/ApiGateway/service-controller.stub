@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Jose1805\LaravelMicroservices\Models\Service;
 use Jose1805\LaravelMicroservices\Traits\ApiResponser;
 use Illuminate\Http\Request;
@@ -27,9 +28,9 @@ class $CLASS_NAME$Controller extends Controller
     /**
      * Lista de elementos del servicio
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request) : JsonResponse
     {
         $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         $response = $this->$SERVICE_NAME$->getElements($request->all());
@@ -41,9 +42,9 @@ class $CLASS_NAME$Controller extends Controller
      * Registro de un nuevo elemento en el servicio
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request) : JsonResponse
     {
         $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         $response = $this->$SERVICE_NAME$->createElement($request->all());
@@ -58,9 +59,9 @@ class $CLASS_NAME$Controller extends Controller
      * Obtiene el recurso especificado
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, $id) : JsonResponse
     {
         $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         $response = $this->$SERVICE_NAME$->getElement($id);
@@ -72,9 +73,9 @@ class $CLASS_NAME$Controller extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) : JsonResponse
     {
         $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         $response = $this->$SERVICE_NAME$->updateElement($id, $request->all());
@@ -89,12 +90,12 @@ class $CLASS_NAME$Controller extends Controller
      * Elimina el recurso especificado
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id) : JsonResponse
     {
         $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
-        $response = $this->$SERVICE_NAME$->destroy($id);
+        $response = $this->$SERVICE_NAME$->destroyElement($id);
         return $this->generateResponseByService($response);
 
         //$this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;

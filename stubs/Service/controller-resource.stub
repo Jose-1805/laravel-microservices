@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Store$CLASS_NAME$Request;
 use App\Http\Requests\Update$CLASS_NAME$Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\$CLASS_NAME$;
 use Jose1805\LaravelMicroservices\Traits\ApiResponser;
@@ -25,9 +26,9 @@ class $CLASS_NAME$Controller extends Controller
      * Lista paginada de elementos
      * el objecto $request puede contener (per_page, page, search, sort, direction)
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         return $this->httpOkResponse(
             $this->paginate($CLASS_NAME$::select('*'), $request)
@@ -38,9 +39,9 @@ class $CLASS_NAME$Controller extends Controller
      * Crea un registro del recurso
      *
      * @param  App\Http\Requests\Store$CLASS_NAME$Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Store$CLASS_NAME$Request $request)
+    public function store(Store$CLASS_NAME$Request $request): JsonResponse
     {
         $$RESOURCE_NAME$ = $CLASS_NAME$::create($request->all());
         return $this->generateResponse($$RESOURCE_NAME$, Response::HTTP_CREATED);
@@ -50,9 +51,9 @@ class $CLASS_NAME$Controller extends Controller
      * Obtiene el recurso especificado
      *
      * @param  App\Models\$CLASS_NAME$  $$RESOURCE_NAME$
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show($CLASS_NAME$ $$RESOURCE_NAME$)
+    public function show($CLASS_NAME$ $$RESOURCE_NAME$): JsonResponse
     {
         return $this->httpOkResponse($$RESOURCE_NAME$);
     }
@@ -62,9 +63,9 @@ class $CLASS_NAME$Controller extends Controller
      *
      * @param  App\Http\Requests\Update$CLASS_NAME$Request  $request
      * @param  App\Models\$CLASS_NAME$  $$RESOURCE_NAME$
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Update$CLASS_NAME$Request $request, $CLASS_NAME$ $$RESOURCE_NAME$)
+    public function update(Update$CLASS_NAME$Request $request, $CLASS_NAME$ $$RESOURCE_NAME$): JsonResponse
     {
         $$RESOURCE_NAME$->update($request->all());
         return $this->httpOkResponse($$RESOURCE_NAME$);
@@ -74,9 +75,9 @@ class $CLASS_NAME$Controller extends Controller
      * Elimina un recurso especifico
      *
      * @param  App\Models\$CLASS_NAME$  $$RESOURCE_NAME$
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($CLASS_NAME$ $$RESOURCE_NAME$)
+    public function destroy($CLASS_NAME$ $$RESOURCE_NAME$): JsonResponse
     {
         $$RESOURCE_NAME$->delete();
         return $this->httpOkResponse();
