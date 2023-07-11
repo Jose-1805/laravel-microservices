@@ -17,6 +17,7 @@ class ServiceProvider extends SP
             // Middleware para autenticar usuarios desde un micro servicio
             app('router')->aliasMiddleware('auth_service_user', \Jose1805\LaravelMicroservices\Http\Middleware\ApiGateway\AuthenticateServiceUser::class);
             app('router')->aliasMiddleware('teams', \Jose1805\LaravelMicroservices\Http\Middleware\ApiGateway\TeamsPermission::class);
+            app('router')->aliasMiddleware('request_from_micro_service', \Jose1805\LaravelMicroservices\Http\Middleware\ApiGateway\RequestFromMicroService::class);
 
             $this->commands([
                 // Comando para recursos y configuraciones para acceder a un servicio
