@@ -18,9 +18,5 @@ class Service extends Model
 
     protected $fillable = [
         'name',
-        'base_uri',
-        'path',
-        'access_token',
-        'queue',
     ];
 }

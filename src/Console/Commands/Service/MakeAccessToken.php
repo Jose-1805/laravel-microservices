@@ -5,7 +5,7 @@ namespace Jose1805\LaravelMicroservices\Console\Commands\Service;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class MakeAccessTokenCommand extends Command
+class MakeAccessToken extends Command
 {
     /**
      * The name and signature of the console command.
@@ -53,7 +53,7 @@ class MakeAccessTokenCommand extends Command
     {
         $file_name = '.env';
         if(!file_exists(base_path($file_name))) {
-            $this->error('No existe el archivo '.$file_name);
+            $this->error('No existe el archivo ' . $file_name);
             return false;
         } else {
             $token = Str::random(rand(30, 40));
@@ -65,14 +65,14 @@ class MakeAccessTokenCommand extends Command
                 if (str_contains($line, 'ACCESS_TOKENS=') && !$is_added) {
                     //Si hay más de un token separa por coma
                     $separator = strlen(trim($line)) > 14 ? ',' : '';
-                    $line = str_replace('ACCESS_TOKENS=', 'ACCESS_TOKENS='.$token.$separator, $line);
+                    $line = str_replace('ACCESS_TOKENS=', 'ACCESS_TOKENS=' . $token . $separator, $line);
                     $is_added = true;
                 }
                 $content .= $line;
             }
 
             if(!$is_added) {
-                $content .= 'ACCESS_TOKENS='.$token.PHP_EOL;
+                $content .= 'ACCESS_TOKENS=' . $token . PHP_EOL;
             }
             rewind($file);
             fwrite($file, $content);

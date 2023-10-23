@@ -19,14 +19,6 @@ class UserUuid extends Model implements Authorizable
     use AccessAuthorizable;
 
     /**
-     * Relación a los tokens asociados al usuario
-     */
-    public function otherTokens()
-    {
-        return $this->hasMany(Token::class);
-    }
-
-    /**
      * Relación a las solicitudes en segundo plano
      */
     public function backgroundRequest()

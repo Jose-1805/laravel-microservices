@@ -7,7 +7,7 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
-class ConsumeAmqpCommand extends Command
+class ConsumeAmqp extends Command
 {
     /**
      * The name and signature of the console command.

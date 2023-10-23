@@ -12,8 +12,8 @@ class BackgroundRequestResolver
     // (id, event, state, input_data, output_data, user_id)
     private $data;
 
-    private $event_response = config('background.event_response');
-    private $queue_response = config('background.queue_response');
+    private $event_response = config('laravel_microservices.background.event_response');
+    private $queue_response = config('laravel_microservices.background.queue_response');
     private $publish_response = true;
     // Datos por defecto que se envían en la respuesta
     private $response_keys = ['id', 'event', 'output_data'];
@@ -63,7 +63,7 @@ class BackgroundRequestResolver
      */
     public function resolve(): void
     {
-        $resolver_class = config('background.events.'.$this->event);
+        $resolver_class = config('laravel_microservices.background.events.' . $this->event);
         if($resolver_class) {
             $resolver = new ($resolver_class)();
             $data_response = $resolver->handle($this->data);
@@ -85,7 +85,7 @@ class BackgroundRequestResolver
             }
             $this->publish_response && $this->publishResult();
         } else {
-            Log::warning('No se encontró configuración para el evento '.$this->event);
+            Log::warning('No se encontró configuración para el evento ' . $this->event);
         }
     }
 }

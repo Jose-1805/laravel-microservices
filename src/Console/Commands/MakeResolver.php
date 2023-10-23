@@ -8,7 +8,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Illuminate\Support\Pluralizer;
 
-class MakeResolverCommand extends Command
+class MakeResolver extends Command
 {
     /**
      * The name and signature of the console command.
@@ -48,14 +48,14 @@ class MakeResolverCommand extends Command
      */
     public function handle()
     {
-        $path_resolver = base_path('app/Background') .'/' .$this->getClassName($this->argument('name')) . '.php';
+        $path_resolver = base_path('app/Background') . '/' . $this->getClassName($this->argument('name')) . '.php';
         if(file_exists($path_resolver)) {
-            $this->warn('Ya existe un archivo llamado '.$this->getClassName($this->argument('name')).'.php');
+            $this->warn('Ya existe un archivo llamado ' . $this->getClassName($this->argument('name')) . '.php');
         } else {
             $this->comment('Creando archivo ...');
-            $this->comment($path_resolver.' ...');
+            $this->comment($path_resolver . ' ...');
 
-            $path_stub_resolver = __DIR__ . '/../../../stubs/'.(config('microservices.is_api_gateway') ? 'ApiGateway' : 'Service').'/resolver-resource.stub';
+            $path_stub_resolver = __DIR__ . '/../../../stubs/' . (config('microservices.is_api_gateway') ? 'ApiGateway' : 'Service') . '/resolver-resource.stub';
             $formatter_resolver = new StubFormatter(
                 $path_resolver,
                 $this->getStubVariables(),
@@ -108,7 +108,7 @@ class MakeResolverCommand extends Command
      */
     public function addEventSetting($event)
     {
-        $file = fopen(base_path('config/background.php'), 'r+') or die('Error');
+        $file = fopen(base_path('config/laravel_microservices.php'), 'r+') or die('Error');
 
         $events_found = false;
         $event_is_added = false;
@@ -119,8 +119,8 @@ class MakeResolverCommand extends Command
             if (str_contains($line, '\'events\' => [') && !$events_found) {
                 $events_found = true;
             } elseif ($events_found && str_contains($line, '],') && !$event_is_added) {
-                $content .= '        \''.$event.'\' => App\\Background\\'.$this->getClassName($this->argument('name')).'::class,'.PHP_EOL;
-                $event_is_added= true;
+                $content .= '        \'' . $event . '\' => App\\Background\\' . $this->getClassName($this->argument('name')) . '::class,' . PHP_EOL;
+                $event_is_added = true;
             }
             $content .= $line;
         }

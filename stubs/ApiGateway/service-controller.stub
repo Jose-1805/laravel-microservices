@@ -16,11 +16,11 @@ class $CLASS_NAME$Controller extends Controller
      *
      * @var Service
      */
-    public $$SERVICE_NAME$;
+    public $microservice;
 
     public function __construct()
     {
-        $this->$SERVICE_NAME$ = Service::where('name', '$SERVICE_NAME_SNAKE$')->first();
+        $this->microservice = Service::where('name', '$MICROSERVICE_NAME$')->first();
         $this->middleware('auth:sanctum');
         //$this->middleware('permission:name')->only(['func']);
     }
@@ -32,8 +32,8 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function index(Request $request) : JsonResponse
     {
-        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
-        $response = $this->$SERVICE_NAME$->getElements($request->all());
+        $this->microservice->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->microservice->getElements($request->all());
 
         return $this->generateResponseByService($response);
     }
@@ -46,13 +46,13 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function store(Request $request) : JsonResponse
     {
-        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
-        $response = $this->$SERVICE_NAME$->createElement($request->all());
+        $this->microservice->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->microservice->createElement($request->all());
         return $this->generateResponseByService($response);
 
-        // $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        // $this->microservice->user_id = $request->user() ? $request->user()->id : null;
         // Ejemplo de ejecución en segundo plano
-        // return $this->$SERVICE_NAME$->resolveInBackground($request, 'create_element');
+        // return $this->microservice->resolveInBackground($request, 'create_element');
     }
 
     /**
@@ -63,8 +63,8 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function show(Request $request, $id) : JsonResponse
     {
-        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
-        $response = $this->$SERVICE_NAME$->getElement($id);
+        $this->microservice->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->microservice->getElement($id);
         return $this->generateResponseByService($response);
     }
 
@@ -77,13 +77,13 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function update(Request $request, $id) : JsonResponse
     {
-        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
-        $response = $this->$SERVICE_NAME$->updateElement($id, $request->all());
+        $this->microservice->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->microservice->updateElement($id, $request->all());
         return $this->generateResponseByService($response);
 
-        //$this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        //$this->microservice->user_id = $request->user() ? $request->user()->id : null;
         //$request->merge(['id' => $id]);
-        //return $this->$SERVICE_NAME$->resolveInBackground($request, 'update_element');
+        //return $this->microservice->resolveInBackground($request, 'update_element');
     }
 
     /**
@@ -94,12 +94,12 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function destroy(Request $request, $id) : JsonResponse
     {
-        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
-        $response = $this->$SERVICE_NAME$->destroyElement($id);
+        $this->microservice->user_id = $request->user() ? $request->user()->id : null;
+        $response = $this->microservice->destroyElement($id);
         return $this->generateResponseByService($response);
 
-        //$this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
+        //$this->microservice->user_id = $request->user() ? $request->user()->id : null;
         //$request->merge(['id' => $id]);
-        //return $this->$SERVICE_NAME$->resolveInBackground($request, 'delete_element');
+        //return $this->microservice->resolveInBackground($request, 'delete_element');
     }
 }

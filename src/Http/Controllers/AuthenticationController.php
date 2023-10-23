@@ -48,7 +48,7 @@ class AuthenticationController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return $this->generateResponse([
-                    'email' => ['Los datos de acceso con incorrectos.'],
+                    'email' => ['Los datos de acceso son incorrectos.'],
                 ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

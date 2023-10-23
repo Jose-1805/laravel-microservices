@@ -22,8 +22,8 @@ trait ServiceConsumer
     {
         $func = strtolower($method);
 
-        $request = Http::baseUrl($this->base_uri)->withHeaders([
-            'Authorization' => $this->access_token,
+        $request = Http::baseUrl(config('laravel_microservices.microservices.' . strtolower($this->name) . '.base_uri'))->withHeaders([
+            'Authorization' => config('laravel_microservices.microservices.' . strtolower($this->name) . '.access_token'),
             'UserId' => $this->user_id
         ]);
 
@@ -70,7 +70,7 @@ trait ServiceConsumer
      */
     public function getElements($params = []): array
     {
-        return $this->performRequest('GET', $this->path, $params);
+        return $this->performRequest('GET', config('laravel_microservices.microservices.' . strtolower($this->name) . '.path'), $params);
     }
 
     /**
@@ -81,7 +81,7 @@ trait ServiceConsumer
      */
     public function getElement($id): array
     {
-        return $this->performRequest('GET', $this->path.'/'.$id);
+        return $this->performRequest('GET', config('laravel_microservices.microservices.' . strtolower($this->name) . '.path') . '/' . $id);
     }
 
     /**
@@ -92,7 +92,7 @@ trait ServiceConsumer
      */
     public function createElement($data): array
     {
-        return $this->performRequest('POST', $this->path, $data);
+        return $this->performRequest('POST', config('laravel_microservices.microservices.' . strtolower($this->name) . '.path'), $data);
     }
 
     /**
@@ -104,7 +104,7 @@ trait ServiceConsumer
      */
     public function updateElement($id, $data): array
     {
-        return $this->performRequest('PUT', $this->path.'/'.$id, $data);
+        return $this->performRequest('PUT', config('laravel_microservices.microservices.' . strtolower($this->name) . '.path') . '/' . $id, $data);
     }
 
     /**
@@ -115,6 +115,6 @@ trait ServiceConsumer
      */
     public function destroyElement($id): array
     {
-        return $this->performRequest('DELETE', $this->path.'/'.$id);
+        return $this->performRequest('DELETE', config('laravel_microservices.microservices.' . strtolower($this->name) . '.path') . '/' . $id);
     }
 }

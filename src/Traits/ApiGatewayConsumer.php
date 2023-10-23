@@ -20,12 +20,12 @@ trait ApiGatewayConsumer
      */
     public function performRequest($method, $requestUrl, $formParams = [], $isFile = false): mixed
     {
-        $base_uri = config('services.api_gateway.base_uri');
+        $base_uri = config('laravel_microservices.api_gateway.base_uri');
 
         $func = strtolower($method);
 
         $request = Http::baseUrl($base_uri)->withHeaders([
-            'Authorization' => 'Bearer '.config('services.api_gateway.access_token'),
+            'Authorization' => 'Bearer ' . config('laravel_microservices.api_gateway.access_token'),
             'UserId' => $this->user_id
         ]);
 

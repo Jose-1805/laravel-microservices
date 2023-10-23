@@ -20,7 +20,7 @@ trait PaginateModels
     {
         return $this->applyFilters($builder, $request)->paginate($request->per_page ?? $per_page)
         ->withQueryString()
-        ->withPath(config('services.api_gateway.public_url'));
+        ->withPath(config('laravel_microservices.api_gateway.public_url'));
     }
 
     /**
@@ -51,7 +51,7 @@ trait PaginateModels
             : (new ($builder->getModel())())->search_columns;
 
         if ($search && $search_columns && gettype($search_columns) == 'array') {
-            $like = '%'.$search.'%';
+            $like = '%' . $search . '%';
             $builder = $builder->where(function ($q) use ($like, $search_columns, $builder) {
                 $i = 0;
                 foreach($search_columns as $field) {
@@ -116,7 +116,7 @@ trait PaginateModels
         if(count($data) > 1) {
             $result = $field;
         } else {
-            $result = $this->getTableName($builder).'.'.$field;
+            $result = $this->getTableName($builder) . '.' . $field;
         }
         return $result;
     }

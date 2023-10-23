@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Illuminate\Support\Pluralizer;
 
-class MakeResourceCommand extends Command
+class MakeResource extends Command
 {
     /**
      * The name and signature of the console command.
@@ -49,10 +49,10 @@ class MakeResourceCommand extends Command
      */
     public function handle()
     {
-        $path_controller = base_path('app/Http/Controllers') .'/' .$this->getClassName($this->argument('name')) . 'Controller.php';
+        $path_controller = base_path('app/Http/Controllers') . '/' . $this->getClassName($this->argument('name')) . 'Controller.php';
 
         $this->comment('Creando recursos iniciales con artisan');
-        Artisan::call('make:model '.$this->getClassName($this->argument('name')).' -m -c -R --api');
+        Artisan::call('make:model ' . $this->getClassName($this->argument('name')) . ' -m -c -R --api');
         @unlink($path_controller);
         $this->info('Recursos iniciales creados con éxito');
 
@@ -137,12 +137,12 @@ class MakeResourceCommand extends Command
         $content = '';
         while ($line = fgets($file)) {
             if (str_contains($line, 'use ') && !$use_is_added) {
-                $content .= 'use App\Http\Controllers\\'.$controller_name.';'.PHP_EOL;
+                $content .= 'use App\Http\Controllers\\' . $controller_name . ';' . PHP_EOL;
                 $use_is_added = true;
             }
             $content .= $line;
         }
-        $content .= 'Route::apiResource(\''.$route_name.'\', '.$controller_name.'::class);'.PHP_EOL;
+        $content .= 'Route::apiResource(\'' . $route_name . '\', ' . $controller_name . '::class);' . PHP_EOL;
         rewind($file);
         fwrite($file, $content);
         fclose($file);
