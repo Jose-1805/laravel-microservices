@@ -2,7 +2,7 @@
 
 namespace Jose1805\LaravelMicroservices\Providers;
 
-use App\Console\Commands\SyncRolesAndPermissions;
+use Jose1805\LaravelMicroservices\Console\Commands\ApiGateway\SyncRolesAndPermissions;
 use Illuminate\Support\ServiceProvider as SP;
 use Jose1805\LaravelMicroservices\Console\Commands\ApiGateway\SyncMicroserviceConnections;
 use Jose1805\LaravelMicroservices\Console\Commands\ConsumeAmqp;
