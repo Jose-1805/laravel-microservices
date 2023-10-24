@@ -32,7 +32,10 @@ php artisan vendor:publish --tag=laravel-microservices-config-api-gateway
 php artisan vendor:publish --tag=laravel-microservices-config-api-gateway-no-uuids
 ```
 
-Se publicará un archivo de configuración llamado `laravel_microservices.php̣` en el directorio config de su proyecto. El paquete utiliza uuids por defecto para configurar la librería de `laravel-permission` y el modelo User, si desea utilizar identificadores enteros auto incrementales configure el valor de la clave `use_uuid` en `false`. A continuación se describen los demás valores del archivo.
+Se publicará un archivo de configuración llamado `laravel_microservices.php̣` en el directorio config de su proyecto y un archivo de migración de la tabla de usuarios cuyo nombre termina en `laravel_microservices_create_users_table.php`, agregue los campos adicionales que requiera en la tabla de usuarios y elimine la migración de la tabla de usuarios por defecto. A continuación se describen los valores del archivo de configuración.
+
+`use_uuid`
+Determina si se deben utilizar uuids en los modelos del paquete, no debe editar este valor y que se define automáticamente de acuerdo al comando ejecutado para publicar los archivos de configuración.
 
 `background`
 Este item contiene la configuración para resolver las solicitudes en segundo plano, dentro de él encontrará el key `events` que se encarga de asociar un evento (un evento es el nombre asignado a una solicitud en segundo plano) con un el nombre de la clase que se ejecutará al recibir dicho evento, este valor se debe ir diligenciando a medida que se crean eventos aunque en el api gateway no es común agregar eventos. Por lo general el api gateway recibirá únicamente el evento `background_request_result` que hace referencia al resultado de la ejecución de una solicitud en segundo plano. El paquete se encarga de esto y realiza los cambios necesarios en el registro en base de datos de la solicitud en segundo plano. Si desea cambiar esta clase asegúrese de registrar el resultado de la solicitud en la columna `output_data` de la tabla `background_requests` y también cambiar el estado como `1` en la columna `state`. En la sección de comandos para api gateway se explica como se crean los eventos y las clases asociadas.
