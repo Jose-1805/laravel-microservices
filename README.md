@@ -20,13 +20,13 @@ Para configurar su api gateway realice los siguientes pasos para establecer la c
 
 Publique el archivo de configuración inicial con uno de los siguientes comandos:
 
-1. Archivo de configuración por defecto con uso de UUIDS
+1. Si desea implementar modelos con el uso de UUIDS
 
 ```
 php artisan vendor:publish --tag=laravel-microservices-config-api-gateway
 ```
 
-2. Archivo de configuración sin el uso de UUIDS
+2. Si desea que los modelos se implementen sin el uso de UUIDS
 
 ```
 php artisan vendor:publish --tag=laravel-microservices-config-api-gateway-no-uuids
