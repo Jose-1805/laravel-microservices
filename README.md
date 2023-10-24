@@ -18,10 +18,18 @@ Para configurar su api gateway realice los siguientes pasos para establecer la c
 
 ### Paso #1
 
-Publique el archivo de configuración inicial con el siguiente comando:
+Publique el archivo de configuración inicial con uno de los siguientes comandos:
+
+1. Archivo de configuración por defecto con uso de UUIDS
 
 ```
-php artisan vendor:publish --tag=laravel-microservices-config
+php artisan vendor:publish --tag=laravel-microservices-config-api-gateway
+```
+
+2. Archivo de configuración sin el uso de UUIDS
+
+```
+php artisan vendor:publish --tag=laravel-microservices-config-api-gateway-no-uuids
 ```
 
 Se publicará un archivo de configuración llamado `laravel_microservices.php̣` en el directorio config de su proyecto. El paquete utiliza uuids por defecto para configurar la librería de `laravel-permission` y el modelo User, si desea utilizar identificadores enteros auto incrementales configure el valor de la clave `use_uuid` en `false`. A continuación se describen los demás valores del archivo.
@@ -243,7 +251,7 @@ Para configurar un micro servicio realice los siguientes pasos para establecer l
 Publique el archivo de configuración con el siguiente comando
 
 ```
-php artisan vendor:publish --tag=laravel-microservices-config
+php artisan vendor:publish --tag=laravel-microservices-config-microservice
 ```
 
 Se publicará un archivo de configuración llamado `laravel_-_microservices.php` en el directorio `config` de su proyecto, por ahora no debe realizar ningún cambio en este archivo pero debe agregar las variables de entorno para la configuración de acceso al api gateway (`API_GATEWAY_PUBLIC_URL, API_GATEWAY_BASE_URI` y `API_GATEWAY_ACCESS_TOKEN`). A continuación, se describen las configuraciones que se pueden realizar con los elementos del array.

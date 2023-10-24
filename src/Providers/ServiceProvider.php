@@ -14,7 +14,7 @@ class ServiceProvider extends SP
 {
     public function register()
     {
-        if(config('microservices.is_api_gateway')) {
+        if(config('laravel_microservices.is_api_gateway')) {
             // Middleware para autenticar usuarios desde un micro servicio
             app('router')->aliasMiddleware('auth_service_user', \Jose1805\LaravelMicroservices\Http\Middleware\ApiGateway\AuthenticateServiceUser::class);
             app('router')->aliasMiddleware('teams', \Jose1805\LaravelMicroservices\Http\Middleware\ApiGateway\TeamsPermission::class);
@@ -55,22 +55,29 @@ class ServiceProvider extends SP
 
     public function boot()
     {
-        // Configuración del paquete
+        // Configuración del paquete para api gateway
         $this->publishes([
-            __DIR__ . '/../../config/laravel_microservices_' . $this->getTargetName() . '.php' => config_path('laravel_microservices.php'),
-        ], 'laravel-microservices-config');
+            __DIR__ . '/../../config/laravel_microservices_api_gateway.php' => config_path('laravel_microservices.php'),
+            __DIR__ . '/../../database/migrations/uuid/laravel_microservices_create_users_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_laravel_microservices_create_users_table.php'),
+        ], 'laravel-microservices-config-api-gateway');
 
-        if(config('microservices.is_api_gateway')) {
-            // COnfiguraciones necesarias para el api gateway
-            $this->publishes([
-                __DIR__ . '/../../database/migrations/' . (config('microservices.use_uuid') ? 'uuid' : 'bigint') . '/laravel_microservices_create_users_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_laravel_microservices_create_users_table.php'),
-            ], 'laravel-microservices-config');
+        // Configuración del paquete para api gateway sin uuids
+        $this->publishes([
+            __DIR__ . '/../../config/laravel_microservices_api_gateway_no_uuids.php' => config_path('laravel_microservices.php'),
+            __DIR__ . '/../../database/migrations/bigint/laravel_microservices_create_users_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_laravel_microservices_create_users_table.php'),
+        ], 'laravel-microservices-config-api-gateway-no-uuids');
 
+        // Configuración del paquete para microservicios
+        $this->publishes([
+            __DIR__ . '/../../config/laravel_microservices_microservice.php' => config_path('laravel_microservices.php'),
+        ], 'laravel-microservices-config-microservice');
+
+        if(config('laravel_microservices.is_api_gateway')) {
             // Rutas iniciales del api gateway
             $this->loadRoutesFrom(__DIR__ . '/../../routes/ApiGateway/api.php');
 
             // Configuración de migraciones necesarias en el api gateway
-            if(config('microservices.use_uuid')) {
+            if(config('laravel_microservices.use_uuid')) {
                 $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations/uuid/required');
             } else {
                 $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations/bigint/required');
@@ -85,6 +92,6 @@ class ServiceProvider extends SP
      */
     public function getTargetName(): string
     {
-        return config('microservices.is_api_gateway') ? 'api_gateway' : 'service';
+        return config('laravel_microservices.is_api_gateway') ? 'api_gateway' : 'service';
     }
 }
