@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Jose1805\LaravelMicroservices\Console\Commands\ApiGateway;
 
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Permission;
