@@ -92,6 +92,6 @@ class ServiceProvider extends SP
      */
     public function getTargetName(): string
     {
-        return config('laravel_microservices.is_api_gateway') ? 'api_gateway' : 'service';
+        return config('laravel_microservices.is_api_gateway') ? 'api_gateway' : 'microservice';
     }
 }
