@@ -51,6 +51,11 @@ class ServiceProvider extends SP
             __DIR__ . '/../../config/laravel_microservices_' . $this->getTargetName() . '.php',
             'laravel_microservices'
         );
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/amqp.php',
+            'amqp'
+        );
     }
 
     public function boot()
