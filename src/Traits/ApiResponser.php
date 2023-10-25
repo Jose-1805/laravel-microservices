@@ -37,6 +37,7 @@ trait ApiResponser
                 break;
         }
     }
+
     /**
      * Genera una respuesta JSON estándar a partir de la respuesta de un servicio
      *
@@ -68,6 +69,39 @@ trait ApiResponser
     }
 
     /**
+     * Respuesta para solicitudes de creación procesadas con éxito
+     *
+     * @param array|string $data
+     * @return JsonResponse
+     */
+    public function httpCreatedResponse(array|string $data = []): JsonResponse
+    {
+        return $this->generateResponse($data, Response::HTTP_CREATED);
+    }
+
+
+    /**
+     * Respuesta para solicitudes que no se pueden procesar
+     *
+     * @param array|string $errors
+     * @return JsonResponse
+     */
+    public function httpUnprocessableEntityErrorResponse(array|string $errors = []): JsonResponse
+    {
+        return $this->generateResponse($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * Respuesta para solicitudes a funcionalidades no permitidas
+     *
+     * @return JsonResponse
+     */
+    public function notFoundErrorResponse(): JsonResponse
+    {
+        return $this->generateResponse('Not found', Response::HTTP_NOT_FOUND);
+    }
+
+    /**
      * Genera una respuesta con código de respuesta HTTP_UNAUTHORIZED 401
      *
      * @param string|array $data
@@ -87,7 +121,7 @@ trait ApiResponser
         }
         if ($exception instanceof ModelNotFoundException) {
             $model = strtolower(class_basename($exception->getModel()));
-            return $this->generateResponse('Does not exist any instance of '.$model.' with the given id', Response::HTTP_NOT_FOUND);
+            return $this->generateResponse('Does not exist any instance of ' . $model . ' with the given id', Response::HTTP_NOT_FOUND);
         }
         if ($exception instanceof AuthorizationException) {
             return $this->generateResponse($exception->getMessage(), Response::HTTP_FORBIDDEN);
@@ -106,7 +140,7 @@ trait ApiResponser
             return $this->generateResponse($message, $code);
         }
         if ($exception instanceof RouteNotFoundException) {
-            return $this->generateResponse('Route not found ('.$request->fullUrl().')', Response::HTTP_NOT_FOUND);
+            return $this->generateResponse('Route not found (' . $request->fullUrl() . ')', Response::HTTP_NOT_FOUND);
         }
 
 
