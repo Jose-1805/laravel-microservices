@@ -32,8 +32,8 @@ trait ApiResponser
                 return \response()->json(['data' => $final_data, 'code' => $code], $code);
                 break;
             default:
-                $final_data = is_array($data) ? (array_key_exists('error', $data) && array_key_exists('code', $data) ? $data['error'] : $data) : $data;
-                return \response()->json(['error' => $data, 'code' => $code], $code);
+                $final_data = is_array($data) ? (array_key_exists('errors', $data) && array_key_exists('code', $data) ? $data['errors'] : $data) : $data;
+                return \response()->json(['errors' => $data, 'code' => $code], $code);
                 break;
         }
     }
@@ -48,10 +48,10 @@ trait ApiResponser
     {
         if (array_key_exists('data', $data) && array_key_exists('code', $data)) {
             return $this->generateResponse($data['data'], $data['code']);
-        } elseif (array_key_exists('error', $data) && array_key_exists('code', $data)) {
-            return $this->generateResponse($data['error'], $data['code']);
-        } elseif (array_key_exists('error', $data)) {
-            return $this->generateResponse($data['error'], 500);
+        } elseif (array_key_exists('errors', $data) && array_key_exists('code', $data)) {
+            return $this->generateResponse($data['errors'], $data['code']);
+        } elseif (array_key_exists('errors', $data)) {
+            return $this->generateResponse($data['errors'], 500);
         }
 
         return $this->generateResponse($data, 500);
